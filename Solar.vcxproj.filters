@@ -10,6 +10,18 @@
     <ClCompile Include="shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Resonator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="资源文件">
@@ -33,6 +45,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="shader_m.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resonator.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
