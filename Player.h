@@ -17,7 +17,7 @@
 // hackTime interval
 #define HACKTIME (5.0f)
 // Õ¨µ¯µÄ×÷ÓÃ·¶Î§
-#define XMPRADIUS (5.0f)
+#define XMPRADIUS (8.0f)
 // ÉËº¦
 #define HURT (100)
 

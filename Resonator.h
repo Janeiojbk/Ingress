@@ -5,19 +5,19 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 #include "Resonator.h"
+#include "Object.h"
 #include "shader_m.h"
 
-class Resonator
+
+class Resonator:public Object
 {
 public:
-	Resonator(float distance);
+	Resonator();
+	Resonator(glm::vec3 PortalPosition, int index, float Distance);
 	~Resonator();
-	void draw(Shader ourShader, glm::vec3 pos);
 
-	long health;
 	float distance;
-private:
-	unsigned int VBO, VAO;
-	float vertices[180];
+	long health;
+	int index;
 };
 

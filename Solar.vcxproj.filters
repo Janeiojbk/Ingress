@@ -22,6 +22,7 @@
     <ClCompile Include="Resonator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="资源文件">
@@ -59,6 +60,7 @@
     <ClInclude Include="Resonator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment_shader.fs">

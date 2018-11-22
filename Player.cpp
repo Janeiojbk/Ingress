@@ -6,8 +6,8 @@ Player::Player()
 	xm = 10000;
 	camp = 1;
 	// 道具数量
-	resonatorNum = 8;
-	xmpBursterNum = 2;
+	resonatorNum = 99;
+	xmpBursterNum = 99;
 	powerCubeNum = 2;
 }
 
@@ -54,8 +54,12 @@ void Player::UseResonator(std::vector<Portal> &portalVec)
 		float distance = sqrt(glm::dot(ObjVec, ObjVec));
 		if (distance <= RADIUS && resonatorNum > 0) {
 			--resonatorNum;
-			Resonator resonator(distance);
-			portal.resonator.push_back(resonator);
+			for (int i = 0; i != 8; i++) {
+				if (portal.resonator[i].index == -1) {
+					portal.resonator[i] = Resonator(portal.position, i, distance);
+					break;
+				}
+			}
 		}
 	}
 }
@@ -77,23 +81,14 @@ void Player::UseXmpBurster(std::vector<Portal> &portalVec)
 		float distance = sqrt(glm::dot(ObjVec, ObjVec));
 		if (distance <= RADIUS) {
 			float greenValue = sin(timeValue) / 2.0f + 0.5f;
-			int i = 0;
 			std::vector<int> index;
 			for (Resonator &item : portal.resonator) {
-				float x = portal.position.x + item.distance * glm::cos(glm::radians(45.0f * i));
-				float z = portal.position.z + item.distance * glm::sin(glm::radians(45.0f * i));
-				glm::vec3 playerToRes = glm::vec3(x, 0.0f, z) - Position;
+				glm::vec3 playerToRes = item.position - Position;
 				float distanceRes = sqrt(glm::dot(playerToRes, playerToRes));
-				if (distance <= XMPRADIUS) {
-					std::cout << "bang!" << std::endl;
+				if (distanceRes <= XMPRADIUS) {
 					item.health -= HURT;
-					if (item.health <= 0)
-						index.push_back(i);
+					item.index = -1;
 				}
-				i++;
-			}
-			for (int i : index) {
-				portal.resonator.erase(portal.resonator.begin() +  i);
 			}
 		}
 	}

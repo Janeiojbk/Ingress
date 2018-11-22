@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "Player.h"
 #include "Portal.h"
+#include "Enemy.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -81,6 +82,7 @@ int main()
 	glm::vec3 portalPos(0.0f, 0.0f, -5.0f);
 	Portal portal(portalPos);
 	portalVec.push_back(portal);
+	Enemy enemy;
 
 	// render loop
 	// -----------
@@ -114,12 +116,11 @@ int main()
 			portal.draw(ourShader);
 			int i = 0;
 			for (Resonator item : portal.resonator) {
-				float x = portal.position.x + item.distance * glm::cos(glm::radians(45.0f * i));
-				float z = portal.position.z + item.distance * glm::sin(glm::radians(45.0f * i));
-				item.draw(ourShader, glm::vec3(x, 0.0f, z));
-				i++;
+				if(item.health > 0)
+					item.draw(ourShader);
 			}
 		}
+		enemy.draw(ourShader);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
