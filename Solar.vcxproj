@@ -23,7 +23,7 @@
     <ProjectGuid>{173E470F-D582-4D8C-B1DD-50397D198433}</ProjectGuid>
     <RootNamespace>Solar</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>Solar</ProjectName>
+    <ProjectName>Ingress</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
