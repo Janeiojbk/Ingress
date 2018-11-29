@@ -23,8 +23,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>头文件</Filter>
+      <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="资源文件">
@@ -62,6 +63,8 @@
     <ClInclude Include="Resonator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Enemy.h">
       <Filter>头文件</Filter>
     </ClInclude>

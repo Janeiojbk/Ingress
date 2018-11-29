@@ -3,6 +3,7 @@
 
 
 Object::Object(glm::vec3 Color, glm::vec3 Shape)
+	:Model("./wheelByGuo/resonator/resonator.obj")
 {
 	shape = Shape;
 	color = Color;
@@ -65,6 +66,12 @@ Object::Object(glm::vec3 Color, glm::vec3 Shape)
 	glEnableVertexAttribArray(0);
 }
 
+Object::Object(string const path, glm::vec3 scale)
+	: Model(path)
+{
+	this->scale = scale;
+	VAO = 0;
+}
 
 Object::~Object()
 {
@@ -76,13 +83,21 @@ void Object::draw(Shader ourShader)
 	glm::mat4 model = glm::mat4(1.0f);
 
 	model = glm::translate(model, position);
-	model = glm::scale(model, shape);
-	glm::vec4 color = glm::vec4(Object::color, 1.0f);
 
-	ourShader.setMat4("model", model);
-	ourShader.setVec4("ourColor", color);
+	if (VAO != 0) {
+		model = glm::scale(model, shape);
+		glm::vec4 color = glm::vec4(Object::color, 1.0f);
 
-	// render container
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+		ourShader.setMat4("model", model);
+		ourShader.setVec4("ourColor", color);
+
+		// render container
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
+	else {
+		model = glm::scale(model, scale);
+		ourShader.setMat4("model", model);
+		Draw(ourShader);
+	}
 }

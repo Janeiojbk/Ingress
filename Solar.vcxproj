@@ -127,6 +127,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="include\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Portal.cpp" />
@@ -139,6 +140,8 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Portal.h" />

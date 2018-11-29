@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Portal.h"
 #include "Enemy.h"
+#include "Model.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -100,9 +101,8 @@ int main()
 
 		// render
 		// ------
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		// active shader
 		ourShader.use();
@@ -113,6 +113,10 @@ int main()
 		view = player.GetViewMatrix();
 		ourShader.setMat4("projection", projection);
 		ourShader.setMat4("view", view);
+		glm::mat4 model;
+		model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		ourShader.setMat4("model", model);
 		for (Portal portal : portalVec) {
 			portal.draw(ourShader);
 			int i = 0;

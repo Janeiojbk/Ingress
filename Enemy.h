@@ -11,6 +11,5 @@ public:
 	Enemy();
 	~Enemy();
 
-	void AIplay();
 };
 
