@@ -12,8 +12,9 @@ class Portal: public Object
 public:
 	Portal(glm::vec3 Position);
 	~Portal();
+	// 上一次被hack的时间
 	float lastHacked;
-	float radius;
+	// resonator数组
 	Resonator resonator[8];
 };
 

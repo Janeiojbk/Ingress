@@ -25,7 +25,9 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Model.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="资源文件">
@@ -63,21 +65,37 @@
     <ClInclude Include="Resonator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="Enemy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment_shader.fs">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="vertex_shader.vs">
-      <Filter>着色器</Filter>
-    </None>
     <None Include="lib\assimp-vc140-mt.dll">
       <Filter>资源文件</Filter>
+    </None>
+    <None Include="vertex_shader.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="fragment_shader.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="OnlyColor.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="OnlyColor.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="skybox.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="skybox.frag">
+      <Filter>着色器</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

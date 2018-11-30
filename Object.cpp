@@ -1,7 +1,8 @@
 #include "Object.h"
 
 
-
+// 由于Model没有默认构造函数，这里随便给一个对象模型
+// 这个是自己画的构造函数
 Object::Object(glm::vec3 Color, glm::vec3 Shape)
 	:Model("./wheelByGuo/resonator/resonator.obj")
 {
@@ -66,24 +67,21 @@ Object::Object(glm::vec3 Color, glm::vec3 Shape)
 	glEnableVertexAttribArray(0);
 }
 
+// 导入模型的构造函数
 Object::Object(string const path, glm::vec3 scale)
 	: Model(path)
 {
 	this->scale = scale;
 	VAO = 0;
 }
-
-Object::~Object()
-{
-}
-
+// Draw驱动函数
 void Object::draw(Shader ourShader)
 {
 	// set up matrix
 	glm::mat4 model = glm::mat4(1.0f);
 
 	model = glm::translate(model, position);
-
+	// VAO为0则表示是导入模型
 	if (VAO != 0) {
 		model = glm::scale(model, shape);
 		glm::vec4 color = glm::vec4(Object::color, 1.0f);
@@ -97,7 +95,11 @@ void Object::draw(Shader ourShader)
 	}
 	else {
 		model = glm::scale(model, scale);
+		
+		if(scale.x >= 1.5f)
+			model = glm::translate(model, glm::vec3(-26604.0f, -0.5f, 49336.5f));
 		ourShader.setMat4("model", model);
 		Draw(ourShader);
 	}
 }
+

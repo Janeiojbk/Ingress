@@ -149,9 +149,13 @@
     <ClInclude Include="shader_m.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment_shader.fs" />
+    <None Include="fragment_shader.frag" />
     <None Include="lib\assimp-vc140-mt.dll" />
-    <None Include="vertex_shader.vs" />
+    <None Include="OnlyColor.frag" />
+    <None Include="OnlyColor.vert" />
+    <None Include="skybox.frag" />
+    <None Include="skybox.vert" />
+    <None Include="vertex_shader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\assimp-vc140-mt.lib" />

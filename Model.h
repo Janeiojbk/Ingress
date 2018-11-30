@@ -44,7 +44,9 @@ public:
 	void Draw(Shader shader)
 	{
 		for (unsigned int i = 0; i < meshes.size(); i++)
+		{
 			meshes[i].Draw(shader);
+		}
 	}
 
 private:
@@ -121,6 +123,7 @@ private:
 			}
 			else
 				vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+			
 			// tangent
 			vector.x = mesh->mTangents[i].x;
 			vector.y = mesh->mTangents[i].y;
@@ -138,8 +141,9 @@ private:
 		{
 			aiFace face = mesh->mFaces[i];
 			// retrieve all indices of the face and store them in the indices vector
-			for (unsigned int j = 0; j < face.mNumIndices; j++)
+			for (unsigned int j = 0; j < face.mNumIndices; j++) {
 				indices.push_back(face.mIndices[j]);
+			}
 		}
 		// process materials
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
