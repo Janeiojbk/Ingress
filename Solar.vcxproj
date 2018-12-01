@@ -153,6 +153,8 @@
     <None Include="lib\assimp-vc140-mt.dll" />
     <None Include="OnlyColor.frag" />
     <None Include="OnlyColor.vert" />
+    <None Include="simpleDepthShader.frag" />
+    <None Include="simpleDepthShader.vert" />
     <None Include="skybox.frag" />
     <None Include="skybox.vert" />
     <None Include="vertex_shader.vert" />

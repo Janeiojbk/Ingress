@@ -97,6 +97,12 @@
     <None Include="skybox.frag">
       <Filter>着色器</Filter>
     </None>
+    <None Include="simpleDepthShader.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="simpleDepthShader.frag">
+      <Filter>着色器</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\assimp-vc140-mt.lib">

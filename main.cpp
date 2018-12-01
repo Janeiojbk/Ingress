@@ -80,7 +80,17 @@ int main()
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
-
+	/*
+	vector<std::string> faces
+	{
+		"./image/right.jpg",
+		"./image/left.jpg",
+		"./image/top.jpg",
+		"./image/bottom.jpg",
+		"./image/front.jpg",
+		"./image/back.jpg"
+	};
+	*/
 	vector<std::string> faces
 	{
 		"./image/right.jpg",
@@ -91,73 +101,38 @@ int main()
 		"./image/back.jpg"
 	};
 	unsigned int cubemapTexture = loadCubemap(faces);
-	float skyboxVertices[] = {
-		// positions          
-		-1.0f,  1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-
-		-1.0f, -1.0f,  1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f,  1.0f,
-		-1.0f, -1.0f,  1.0f,
-
-		1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-
-		-1.0f, -1.0f,  1.0f,
-		-1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f, -1.0f,  1.0f,
-		-1.0f, -1.0f,  1.0f,
-
-		-1.0f,  1.0f, -1.0f,
-		1.0f,  1.0f, -1.0f,
-		1.0f,  1.0f,  1.0f,
-		1.0f,  1.0f,  1.0f,
-		-1.0f,  1.0f,  1.0f,
-		-1.0f,  1.0f, -1.0f,
-
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f,  1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f,  1.0f,
-		1.0f, -1.0f,  1.0f
-	};
-	unsigned int VAO, VBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
 
 	Shader ourShader("vertex_shader.vert", "fragment_shader.frag");
 	Shader colorShader("OnlyColor.vert", "OnlyColor.frag");
 	Shader skyboxShader("skybox.vert", "skybox.frag");
-	glm::vec3 portalPos(0.0f, 0.0f, -5.0f);
+	Shader simpleDepthShader("simpleDepthShader.vert", "simpleDepthShader.frag");
+	glm::vec3 portalPos(-150.0f, 50.0f, -200.0f);
 	Portal portal(portalPos);
 	portalVec.push_back(portal);
 	Enemy enemy;
 	Object scene("./wheelByYang/scene/scene.obj", glm::vec3(1.5f, 1.5f, 1.5f));
+	Object skybox(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2.0f, 2.0f, 2.0f));
 	cout << "import completed" << endl;
 	
+	GLuint depthMapFBO;
+	glGenFramebuffers(1, &depthMapFBO);
+	const GLuint SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
+
+	GLuint depthMap;
+	glGenTextures(1, &depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+		SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
@@ -172,52 +147,93 @@ int main()
 		// -----
 		processInput(window);
 
-		// render
-		// ------
-		glClearColor(0.03f, 0.05f, 0.03f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// 1. Render depth of scene to texture (from ligth's perspective)
+		// - Get light projection/view matrix.
+		glm::mat4 lightProjection, lightView;
+		glm::mat4 lightSpaceMatrix;
+		GLfloat near_plane = 1.0f, far_plane = 1000.0f;
+		lightProjection = glm::ortho(-500.0f, 500.0f, -500.0f, 500.0f, near_plane, far_plane);
+		lightView = glm::lookAt(glm::vec3(-300.0f, 300.0f, -400.0f), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+		lightSpaceMatrix = lightProjection * lightView;
+		// - now render scene from light's point of view
+		simpleDepthShader.use();
+		simpleDepthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
-		glDepthMask(GL_FALSE);
-		skyboxShader.use();
-		// ... 设置观察和投影矩阵
-		glm::mat4 view = glm::mat4(glm::mat3(player.GetViewMatrix()));
-		glm::mat4 projection = glm::mat4(1.0f);
-		// basic setup
-		projection = glm::perspective(glm::radians(player.Zoom), float(SCR_WIDTH) / float(SCR_HEIGHT), 0.1f, 100.0f);
-		skyboxShader.setMat4("projection", projection);
-		skyboxShader.setMat4("view", view);
-		glBindVertexArray(VAO);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glDepthMask(GL_TRUE);
-
-		// active shader
-		ourShader.use();
-		view = glm::mat4(1.0f);
-		projection = glm::mat4(1.0f);
-		// basic setup
-		projection = glm::perspective(glm::radians(player.Zoom), float(SCR_WIDTH) / float(SCR_HEIGHT), 0.1f, 100.0f);
-		view = player.GetViewMatrix();
-		ourShader.setMat4("projection", projection);
-		ourShader.setMat4("view", view);
-		
-		colorShader.use();
-		colorShader.setMat4("projection", projection);
-		colorShader.setMat4("view", view); 
-		glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		ourShader.setVec4("ourColor", color);
-		
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
 		for (Portal portal : portalVec) {
-			portal.draw(colorShader);
-			ourShader.use();
+			portal.draw(simpleDepthShader);
 			int i = 0;
 			for (Resonator item : portal.resonator) {
-				if(item.health > 0)
-					item.draw(ourShader);
+				if (item.health > 0)
+					item.draw(simpleDepthShader);
 			}
 		}
-		enemy.draw(ourShader);
-		scene.draw(ourShader);
+		enemy.draw(simpleDepthShader);
+		scene.draw(simpleDepthShader);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		
+		// 2. Render scene as normal 
+		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+		// render
+		// ------
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			glDepthMask(GL_FALSE);
+			skyboxShader.use();
+			// ... 设置观察和投影矩阵
+			glm::mat4 view = glm::mat4(glm::mat3(player.GetViewMatrix()));
+			glm::mat4 projection = glm::mat4(1.0f);
+			// basic setup
+			projection = glm::perspective(glm::radians(player.Zoom), float(SCR_WIDTH) / float(SCR_HEIGHT), 0.1f, 100.0f);
+			skyboxShader.setMat4("projection", projection);
+			skyboxShader.setMat4("view", view);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+			skybox.draw(skyboxShader);
+			glDepthMask(GL_TRUE);
+
+			// active shader
+			ourShader.use();
+			ourShader.setVec3("viewPos", player.Position);
+
+			// light properties
+			ourShader.setVec4("light.ambient", 0.4f, 0.4f, 0.4f, 1.0f);
+			ourShader.setVec4("light.diffuse", 0.8f, 0.8f, 0.8f, 1.0f);
+			ourShader.setVec4("light.specular", 1.0f, 1.0f, 1.0f, 1.0f);
+			ourShader.setVec3("light.direction", 3.0f, -1.0f, 4.0f);
+			ourShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+			glActiveTexture(GL_TEXTURE10);
+			glBindTexture(GL_TEXTURE_2D, depthMap);
+			ourShader.setInt("shadowMap", 10);
+
+			view = glm::mat4(1.0f);
+			projection = glm::mat4(1.0f);
+			// basic setup
+			projection = glm::perspective(glm::radians(player.Zoom), float(SCR_WIDTH) / float(SCR_HEIGHT), 0.1f, 1000.0f);
+			view = player.GetViewMatrix();
+			ourShader.setMat4("projection", projection);
+			ourShader.setMat4("view", view);
+
+			colorShader.use();
+			colorShader.setMat4("projection", projection);
+			colorShader.setMat4("view", view);
+			glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+			ourShader.setVec4("ourColor", color);
+
+			for (Portal portal : portalVec) {
+				portal.draw(colorShader);
+				ourShader.use();
+				int i = 0;
+				for (Resonator item : portal.resonator) {
+					if (item.health > 0)
+						item.draw(ourShader);
+				}
+			}
+			enemy.draw(ourShader);
+			scene.draw(ourShader);
+		}
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
