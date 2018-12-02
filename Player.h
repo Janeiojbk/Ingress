@@ -4,6 +4,8 @@
 #include "Portal.h"
 #include "Resonator.h"
 #include "shader_m.h"
+#include "Enemy.h"
+
 #include <vector>
 #include <math.h>
 #include <iostream>
@@ -36,6 +38,8 @@ public:
 	int resonatorNum;
 	int xmpBursterNum;
 	int powerCubeNum;
+
+	void shoot(vector<Enemy> &enemyVec);
 
 	long xm;
 	bool camp;

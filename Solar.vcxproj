@@ -149,8 +149,14 @@
     <ClInclude Include="shader_m.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="boom.frag" />
+    <None Include="boom.geom" />
+    <None Include="boom.vert" />
+    <None Include="boomtoPoint.geom" />
     <None Include="fragment_shader.frag" />
     <None Include="lib\assimp-vc140-mt.dll" />
+    <None Include="noshadow.frag" />
+    <None Include="noshadow.vert" />
     <None Include="OnlyColor.frag" />
     <None Include="OnlyColor.vert" />
     <None Include="simpleDepthShader.frag" />

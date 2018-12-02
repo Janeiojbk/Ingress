@@ -67,15 +67,17 @@ Object::Object(glm::vec3 Color, glm::vec3 Shape)
 }
 
 // 导入模型的构造函数
-Object::Object(string const path, glm::vec3 scale)
+Object::Object(string const path, glm::vec3 scale, float theta)
 	: Model(path)
-{
+{	
+	this->theta = theta;
 	this->scale = scale;
 	VAO = 0;
 }
 // Draw驱动函数
 void Object::draw(Shader ourShader)
 {
+	ourShader.use();
 	// set up matrix
 	glm::mat4 model = glm::mat4(1.0f);
 
@@ -93,6 +95,11 @@ void Object::draw(Shader ourShader)
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 	else {
+		if (position == glm::vec3(0.0f, -0.33f, -1.35f)) {
+			model = glm::rotate(model, glm::radians(8.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			ourShader.setMat4("view", glm::mat4());
+		}
+		model = glm::rotate(model, theta, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, scale);
 		
 		if(scale.x >= 1.5f)

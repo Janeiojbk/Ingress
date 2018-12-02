@@ -6,7 +6,7 @@ Resonator::Resonator() : Object(){
 	index = -1;
 }
 Resonator::Resonator(glm::vec3 PortalPosition, int index, float Distance): 
-	Object("./wheelByGuo/resonator/resonator.obj", glm::vec3(0.6f, 0.6f, 0.6f))
+	Object("./wheelByGuo/resonator/resonator.obj", glm::vec3(0.6f, 0.6f, 0.6f), 0.0f)
 {
 	distance = Distance;
 	health = 100;

@@ -2,10 +2,13 @@
 
 
 
-Enemy::Enemy():Player(), Object("./wheelByYang/enemy.obj", glm::vec3(0.1f, 0.1f, 0.1f))
+Enemy::Enemy():Object("./wheelByYang/enemy.obj", glm::vec3(0.05f, 0.05f, 0.05f), 0.0f)
 {
 	camp = 0;
-	position = glm::vec3(0.0f, 0.0f, -5.0f);
+	position = glm::vec3(0.0f, 0.3f, -5.0f);
+	health = 100.0f;
+	deadtime = 0.0f;
+	live = true;
 }
 
 

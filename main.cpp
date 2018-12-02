@@ -23,6 +23,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 unsigned int loadCubemap(vector<std::string> faces);
 
@@ -30,6 +31,7 @@ unsigned int loadCubemap(vector<std::string> faces);
 Player player;
 
 std::vector<Portal> portalVec;
+vector<Enemy> enemyVec;
 
 // settings
 const unsigned int SCR_WIDTH = 1280;
@@ -66,6 +68,7 @@ int main()
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -106,12 +109,18 @@ int main()
 	Shader colorShader("OnlyColor.vert", "OnlyColor.frag");
 	Shader skyboxShader("skybox.vert", "skybox.frag");
 	Shader simpleDepthShader("simpleDepthShader.vert", "simpleDepthShader.frag");
-	glm::vec3 portalPos(0.0f, 0.0f, 0.0f);
+	Shader noShadow("noshadow.vert", "noshadow.frag");
+	Shader boomShader("boom.vert", "boom.frag", "boom.geom");
+	Shader boomPointShader("boom.vert", "boom.frag", "boomtoPoint.geom");
+
+	glm::vec3 portalPos(3.0f, 1.5f, 1.5f);
 	Portal portal(portalPos);
 	portalVec.push_back(portal);
 	Enemy enemy;
-	Object scene("./wheelByYang/scene/scene.obj", glm::vec3(1.5f, 1.5f, 1.5f));
+	enemyVec.push_back(enemy);
+	Object scene("./wheelByYang/scene/scene.obj", glm::vec3(1.5f, 1.5f, 1.5f), 0.0f);
 	Object skybox(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2.0f, 2.0f, 2.0f));
+	Object gun("./wheelByYang/gun/gun.obj", glm::vec3(0.04f, 0.04f, 0.04f), 0.0f);
 	cout << "import completed" << endl;
 	
 	GLuint depthMapFBO;
@@ -170,7 +179,10 @@ int main()
 					item.draw(simpleDepthShader);
 			}
 		}
-		enemy.draw(simpleDepthShader);
+		for (Enemy enemy : enemyVec) {
+			if(enemy.health > 0.0f)
+				enemy.draw(simpleDepthShader);
+		}
 		scene.draw(simpleDepthShader);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
@@ -196,7 +208,7 @@ int main()
 
 			// active shader
 			ourShader.use();
-			ourShader.setVec3("viewPos", player.Position);
+			ourShader.setVec3("viewPos", player.Position+glm::vec3(1.0f, 0.0f, 1.0f));
 
 			// light properties
 			ourShader.setVec4("light.ambient", 0.4f, 0.4f, 0.4f, 1.0f);
@@ -219,20 +231,53 @@ int main()
 			colorShader.use();
 			colorShader.setMat4("projection", projection);
 			colorShader.setMat4("view", view);
-			glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-			ourShader.setVec4("ourColor", color);
+			
+			noShadow.use();
+			noShadow.setVec3("viewPos", player.Position + glm::vec3(1.0f, 0.0f, 1.0f));
+			// light properties
+			noShadow.setVec4("light.ambient", 0.4f, 0.4f, 0.4f, 1.0f);
+			noShadow.setVec4("light.diffuse", 0.8f, 0.8f, 0.8f, 1.0f);
+			noShadow.setVec4("light.specular", 1.0f, 1.0f, 1.0f, 1.0f);
+			noShadow.setVec3("light.direction", 3.0f, -1.0f, 4.0f);
+			noShadow.setMat4("projection", projection);
+			noShadow.setMat4("view", view);
 
 			for (Portal portal : portalVec) {
 				portal.draw(colorShader);
-				ourShader.use();
 				int i = 0;
+
 				for (Resonator item : portal.resonator) {
 					if (item.health > 0)
-						item.draw(ourShader);
+						item.draw(noShadow);
 				}
 			}
-			enemy.draw(ourShader);
+			for (Enemy enemy : enemyVec) {
+				if (enemy.health > 0.0f)
+					enemy.draw(noShadow);
+				else if(glfwGetTime() - enemy.deadtime < 0.11f){
+					cout << "dieing" << endl;
+					boomShader.use();
+					boomShader.setMat4("projection", projection);
+					boomShader.setMat4("view", view);
+					// add time component to geometry shader in the form of a uniform
+					boomShader.setFloat("time", glfwGetTime() - enemy.deadtime);
+					enemy.draw(boomShader);
+				}
+				else if (glfwGetTime() - enemy.deadtime < 0.7f) {
+					cout << "dieing" << endl;
+					boomPointShader.use();
+					boomPointShader.setMat4("projection", projection);
+					boomPointShader.setMat4("view", view);
+					// add time component to geometry shader in the form of a uniform
+					boomPointShader.setFloat("time", glfwGetTime() - enemy.deadtime);
+					enemy.draw(boomPointShader);
+				}
+			}
 			scene.draw(ourShader);
+			gun.position = glm::vec3(0.0f, -0.33f, -1.35f);
+			gun.theta = glm::radians(90.0f);
+			//gun.theta = glm::dot(glm::normalize(player.Front), glm::vec3(0.0f, 0.0f, -1.0f));
+			gun.draw(noShadow);
 		}
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
@@ -310,6 +355,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		player.UseXmpBurster(portalVec);
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
 		player.UsePowerCube();
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+		player.fly = true;
 }
 
 unsigned int loadCubemap(vector<std::string> faces)
@@ -342,4 +389,23 @@ unsigned int loadCubemap(vector<std::string> faces)
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
 	return textureID;
+}
+
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (action == GLFW_PRESS)
+	switch (button)
+	{
+	case GLFW_MOUSE_BUTTON_LEFT:
+		player.shoot(enemyVec);
+		break;
+	case GLFW_MOUSE_BUTTON_MIDDLE:
+		break;
+	case GLFW_MOUSE_BUTTON_RIGHT:
+		break;
+	default:
+		return;
+	}
+	return;
 }

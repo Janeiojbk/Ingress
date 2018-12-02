@@ -103,6 +103,24 @@
     <None Include="simpleDepthShader.frag">
       <Filter>着色器</Filter>
     </None>
+    <None Include="noshadow.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="noshadow.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="boom.geom">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="boom.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="boom.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="boomtoPoint.geom">
+      <Filter>着色器</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\assimp-vc140-mt.lib">

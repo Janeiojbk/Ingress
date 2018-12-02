@@ -1,13 +1,15 @@
 #pragma once
-#include "Player.h"
+#include "Camera.h"
 #include "Object.h"
 
 class Enemy :
-	public Player,
 	public Object
 {
 public:
-	friend Player;
+	float health;
+	int camp;
+	float deadtime;
+	bool live;
 	Enemy();
 	~Enemy();
 

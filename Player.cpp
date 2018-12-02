@@ -93,3 +93,21 @@ void Player::UseXmpBurster(std::vector<Portal> &portalVec)
 		}
 	}
 }
+
+void Player::shoot(vector<Enemy> &enemyVec)
+{
+	for (Enemy &enemy : enemyVec) {
+		glm::vec3 ObjVec = enemy.position - Position;
+		float theta = glm::dot(glm::normalize(ObjVec), glm::normalize(Front));
+		float distance = sqrt(glm::dot(ObjVec, ObjVec));
+		if (theta >= distance / sqrt(distance*distance + 5.0f * 5.0f) && distance <= 50.0f && enemy.live)
+		{
+			cout << "get it!";
+			enemy.health -= 50.1f;
+			if (enemy.health <= 0) {
+				enemy.deadtime = glfwGetTime();
+				enemy.live = false;
+			}
+		}
+	}
+}
