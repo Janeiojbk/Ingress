@@ -106,7 +106,7 @@ int main()
 	Shader colorShader("OnlyColor.vert", "OnlyColor.frag");
 	Shader skyboxShader("skybox.vert", "skybox.frag");
 	Shader simpleDepthShader("simpleDepthShader.vert", "simpleDepthShader.frag");
-	glm::vec3 portalPos(-150.0f, 50.0f, -200.0f);
+	glm::vec3 portalPos(0.0f, 0.0f, 0.0f);
 	Portal portal(portalPos);
 	portalVec.push_back(portal);
 	Enemy enemy;
