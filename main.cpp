@@ -193,18 +193,8 @@ int main()
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			glDepthMask(GL_FALSE);
-			skyboxShader.use();
-			// ... 设置观察和投影矩阵
 			glm::mat4 view = glm::mat4(glm::mat3(player.GetViewMatrix()));
 			glm::mat4 projection = glm::mat4(1.0f);
-			// basic setup
-			projection = glm::perspective(glm::radians(player.Zoom), float(SCR_WIDTH) / float(SCR_HEIGHT), 0.1f, 100.0f);
-			skyboxShader.setMat4("projection", projection);
-			skyboxShader.setMat4("view", view);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-			skybox.draw(skyboxShader);
-			glDepthMask(GL_TRUE);
 
 			// active shader
 			ourShader.use();
@@ -278,6 +268,16 @@ int main()
 			gun.theta = glm::radians(90.0f);
 			//gun.theta = glm::dot(glm::normalize(player.Front), glm::vec3(0.0f, 0.0f, -1.0f));
 			gun.draw(noShadow);
+
+			glDepthFunc(GL_LEQUAL);
+			skyboxShader.use();
+			// ... 设置观察和投影矩阵
+			view = glm::mat4(glm::mat3(player.GetViewMatrix()));
+			skyboxShader.setMat4("projection", projection);
+			skyboxShader.setMat4("view", view);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+			skybox.draw(skyboxShader);
+			glDepthFunc(GL_LESS);
 		}
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
