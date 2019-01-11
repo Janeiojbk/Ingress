@@ -76,6 +76,11 @@
     <SourcePath>$(VC_SourcePath);</SourcePath>
     <ReferencePath>$(VC_ReferencesPath_x86);</ReferencePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>.\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\lib;$(LibraryPath)</LibraryPath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -129,10 +134,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="particle.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="Resonator.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.md" />
@@ -143,30 +150,45 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="particle.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="Resonator.h" />
     <ClInclude Include="shader_m.h" />
+    <ClInclude Include="texture.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="boom.frag" />
-    <None Include="boom.geom" />
-    <None Include="boom.vert" />
-    <None Include="boomtoPoint.geom" />
-    <None Include="fragment_shader.frag" />
     <None Include="lib\assimp-vc140-mt.dll" />
-    <None Include="noshadow.frag" />
-    <None Include="noshadow.vert" />
-    <None Include="OnlyColor.frag" />
-    <None Include="OnlyColor.vert" />
-    <None Include="simpleDepthShader.frag" />
-    <None Include="simpleDepthShader.vert" />
-    <None Include="skybox.frag" />
-    <None Include="skybox.vert" />
-    <None Include="vertex_shader.vert" />
+    <None Include="lib\freetype.dll" />
+    <None Include="shader\boom.frag" />
+    <None Include="shader\boom.geom" />
+    <None Include="shader\boom.vert" />
+    <None Include="shader\boomtoPoint.geom" />
+    <None Include="shader\fire_ring.frag" />
+    <None Include="shader\fire_ring.vert" />
+    <None Include="shader\fragment_shader.frag" />
+    <None Include="shader\free_type.frag" />
+    <None Include="shader\free_type.vert" />
+    <None Include="shader\noshadow.frag" />
+    <None Include="shader\noshadow.vert" />
+    <None Include="shader\OnlyColor.frag" />
+    <None Include="shader\OnlyColor.vert" />
+    <None Include="shader\particle.frag" />
+    <None Include="shader\particle.vert" />
+    <None Include="shader\reflection.frag" />
+    <None Include="shader\reflection.vert" />
+    <None Include="shader\simpleDepthShader.frag" />
+    <None Include="shader\simpleDepthShader.vert" />
+    <None Include="shader\skybox.frag" />
+    <None Include="shader\skybox.vert" />
+    <None Include="shader\UI.frag" />
+    <None Include="shader\UI.vert" />
+    <None Include="shader\vertex_shader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\assimp-vc140-mt.lib" />
+    <Library Include="lib\freetype.lib" />
+    <Library Include="lib\glfw3.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

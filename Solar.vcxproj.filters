@@ -28,6 +28,12 @@
     <ClCompile Include="Model.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="particle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="资源文件">
@@ -74,56 +80,101 @@
     <ClInclude Include="Model.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="particle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\boom.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\boom.geom">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\boom.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\boomtoPoint.geom">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\fire_ring.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\fire_ring.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\fragment_shader.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\free_type.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\free_type.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\noshadow.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\noshadow.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\OnlyColor.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\OnlyColor.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\particle.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\particle.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\reflection.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\reflection.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\simpleDepthShader.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\simpleDepthShader.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\skybox.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\skybox.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\UI.frag">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\UI.vert">
+      <Filter>着色器</Filter>
+    </None>
+    <None Include="shader\vertex_shader.vert">
+      <Filter>着色器</Filter>
+    </None>
     <None Include="lib\assimp-vc140-mt.dll">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="vertex_shader.vert">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="fragment_shader.frag">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="OnlyColor.vert">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="OnlyColor.frag">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="skybox.vert">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="skybox.frag">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="simpleDepthShader.vert">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="simpleDepthShader.frag">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="noshadow.vert">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="noshadow.frag">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="boom.geom">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="boom.vert">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="boom.frag">
-      <Filter>着色器</Filter>
-    </None>
-    <None Include="boomtoPoint.geom">
-      <Filter>着色器</Filter>
+    <None Include="lib\freetype.dll">
+      <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\assimp-vc140-mt.lib">
+      <Filter>资源文件</Filter>
+    </Library>
+    <Library Include="lib\freetype.lib">
+      <Filter>资源文件</Filter>
+    </Library>
+    <Library Include="lib\glfw3.lib">
       <Filter>资源文件</Filter>
     </Library>
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include "Resonator.h"
 #include "Object.h"
 #include "shader_m.h"
+#include "particle.h"
 
 
 class Resonator:public Object
@@ -19,5 +20,9 @@ public:
 	float distance;
 	long health;
 	int index;
+
+	float putTime;
+
+	ParticleGenerator Particle;
 };
 

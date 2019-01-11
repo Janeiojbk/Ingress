@@ -17,6 +17,7 @@ public:
 	// position在子类中初始化
 	glm::vec3 position, color, scale;
 	glm::vec3 shape;
+	bool isScene;
 	float theta;
 private:
 	// 属于自己画的物体的属性

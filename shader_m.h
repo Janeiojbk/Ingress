@@ -9,6 +9,8 @@
 #include <sstream>
 #include <iostream>
 
+// Refer to https://learnopengl-cn.github.io/01%20Getting%20started/05%20Shaders/
+
 class Shader
 {
 public:

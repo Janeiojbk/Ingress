@@ -1,6 +1,8 @@
 #ifndef MODEL_H
 #define MODEL_H
 
+// Refer to https://learnopengl-cn.github.io/03%20Model%20Loading/03%20Model/
+
 #include <glad/glad.h> 
 
 #include <glm/glm.hpp>

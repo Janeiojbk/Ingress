@@ -13,7 +13,7 @@
 #include <cstdlib>
 
 // hack°ë¾¶
-#define RADIUS (10.0f)
+#define RADIUS (15.0f)
 // Portal Size
 #define PSIZE (0.8f)
 // hackTime interval
@@ -40,9 +40,21 @@ public:
 	int powerCubeNum;
 
 	void shoot(vector<Enemy> &enemyVec);
+	void chat(glm::vec3 b2position);
 
-	long xm;
+	int xm;
 	bool camp;
 
+	bool getR;
+	bool getX;
+	bool getC;
+	bool isWin;
+	bool isShoot;
+	float ShootTime;
+	float HackTime;
+
+	bool isUsingXmp;
+	float XmpTime;
+	glm::vec3 HackPosition;
 };
 

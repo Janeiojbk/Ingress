@@ -4,7 +4,7 @@
 // 由于Model没有默认构造函数，这里随便给一个对象模型
 // 这个是自己画的构造函数
 Object::Object(glm::vec3 Color, glm::vec3 Shape)
-	:Model("./wheelByGuo/resonator/resonator.obj")
+	:Model("./model/resonator/resonator.obj")
 {
 	shape = Shape;
 	color = Color;
@@ -73,6 +73,7 @@ Object::Object(string const path, glm::vec3 scale, float theta)
 	this->theta = theta;
 	this->scale = scale;
 	VAO = 0;
+	isScene = false;
 }
 // Draw驱动函数
 void Object::draw(Shader ourShader)
@@ -95,14 +96,14 @@ void Object::draw(Shader ourShader)
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 	else {
-		if (position == glm::vec3(0.0f, -0.33f, -1.35f)) {
+		if (position == glm::vec3(0.0f, -0.33f, -1.2f)) {
 			model = glm::rotate(model, glm::radians(8.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 			ourShader.setMat4("view", glm::mat4());
 		}
 		model = glm::rotate(model, theta, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, scale);
 		
-		if(scale.x >= 1.5f)
+		if(isScene)
 			model = glm::translate(model, glm::vec3(-26604.0f, -0.5f, 49336.5f));
 		ourShader.setMat4("model", model);
 		Draw(ourShader);

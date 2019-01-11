@@ -3,12 +3,19 @@
 
 Player::Player()
 {
-	xm = 10000;
+	xm = 2000;
 	camp = 1;
 	// 道具数量
-	resonatorNum = 99;
-	xmpBursterNum = 99;
+	resonatorNum = 8;
+	xmpBursterNum = 2;
 	powerCubeNum = 2;
+	getR = false;
+	getX = false;
+	getC = false;
+	isWin = false;
+	isUsingXmp = false;
+	isShoot = false;
+	HackTime = 0;
 }
 
 
@@ -33,40 +40,46 @@ void Player::hack(std::vector<Portal> &portalVec)
 			// getItem
 			srand(unsigned(timeValue*100+1100));
 			int num = rand();
-			if (num / 2 == 0)
+			if (num % 3 == 0) {
 				resonatorNum++;
-			srand(unsigned(timeValue*timeValue*10 + 9954));
-			num = rand();
-			if (num / 2 == 0)
+				getR = true;
+			}
+			if (num % 3 == 1) {
 				xmpBursterNum++;
-			srand(unsigned(sqrt(timeValue*10 + 3384)));
-			num = rand();
-			if (num / 2 == 0)
+				getX = true;
+			}
+			if (num % 3 == 2) {
 				powerCubeNum++;
+				getC = true;
+			}
+			HackPosition = portal.position;
+			HackTime = timeValue;
 		}
 	}
 }
 
 void Player::UseResonator(std::vector<Portal> &portalVec)
 {
-	for (Portal &portal : portalVec) {
-		glm::vec3 ObjVec = portal.position - Position;
-		float distance = sqrt(glm::dot(ObjVec, ObjVec));
-		if (distance <= RADIUS && resonatorNum > 0) {
-			--resonatorNum;
-			for (int i = 0; i != 8; i++) {
-				if (portal.resonator[i].index == -1) {
-					portal.resonator[i] = Resonator(portal.position, i, distance);
-					break;
+	if (resonatorNum > 0) {
+		for (Portal &portal : portalVec) {
+			glm::vec3 ObjVec = portal.position - Position;
+			float distance = sqrt(glm::dot(ObjVec, ObjVec));
+			if (distance <= RADIUS && resonatorNum > 0) {
+				for (int i = 0; i != 8; i++) {
+					if (portal.resonator[i].index == -1) {
+						portal.resonator[i] = Resonator(portal.position, i, distance);
+						break;
+					}
 				}
 			}
 		}
+		--resonatorNum;
 	}
 }
 void Player::UsePowerCube()
 {
-	if (xmpBursterNum > 0) {
-		xmpBursterNum--;
+	if (powerCubeNum > 0) {
+		powerCubeNum--;
 		if (xm <= 2000)
 			xm += 8000;
 		else
@@ -75,22 +88,27 @@ void Player::UsePowerCube()
 }
 void Player::UseXmpBurster(std::vector<Portal> &portalVec)
 {
-	for (Portal &portal : portalVec) {
-		glm::vec3 ObjVec = portal.position - Position;
-		float timeValue = glfwGetTime();
-		float distance = sqrt(glm::dot(ObjVec, ObjVec));
-		if (distance <= RADIUS) {
-			float greenValue = sin(timeValue) / 2.0f + 0.5f;
-			std::vector<int> index;
-			for (Resonator &item : portal.resonator) {
-				glm::vec3 playerToRes = item.position - Position;
-				float distanceRes = sqrt(glm::dot(playerToRes, playerToRes));
-				if (distanceRes <= XMPRADIUS) {
-					item.health -= HURT;
-					item.index = -1;
+	if (xmpBursterNum > 0) {
+		for (Portal &portal : portalVec) {
+			glm::vec3 ObjVec = portal.position - Position;
+			float timeValue = glfwGetTime();
+			float distance = sqrt(glm::dot(ObjVec, ObjVec));
+			if (distance <= RADIUS) {
+				float greenValue = sin(timeValue) / 2.0f + 0.5f;
+				std::vector<int> index;
+				for (Resonator &item : portal.resonator) {
+					glm::vec3 playerToRes = item.position - Position;
+					float distanceRes = sqrt(glm::dot(playerToRes, playerToRes));
+					if (distanceRes <= XMPRADIUS) {
+						item.health -= HURT;
+						item.index = -1;
+					}
 				}
 			}
 		}
+		isUsingXmp = true;
+		XmpTime = glfwGetTime();
+		xmpBursterNum--;
 	}
 }
 
@@ -108,6 +126,14 @@ void Player::shoot(vector<Enemy> &enemyVec)
 				enemy.deadtime = glfwGetTime();
 				enemy.live = false;
 			}
+			break;
 		}
 	}
+	isShoot = true;
+	ShootTime = glfwGetTime();
+}
+
+void Player::chat(glm::vec3 b2position)
+{
+	
 }

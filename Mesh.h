@@ -1,6 +1,8 @@
 #ifndef MESH_H
 #define MESH_H
 
+// Refer to https://learnopengl-cn.github.io/03%20Model%20Loading/03%20Model/
+
 #include <glad/glad.h> // holds all OpenGL type declarations
 
 #include <glm/glm.hpp>
