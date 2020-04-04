@@ -8,12 +8,12 @@
 
 ![1](./pic/IMG_1347.PNG)
 
-![1](./pic/IMG_1348.png)
+![1](./pic/IMG_1348.PNG)
 
-![1](./pic/IMG_1349.png)
+![1](./pic/IMG_1349.PNG)
 
-![1](./pic/IMG_1350.png)
+![1](./pic/IMG_1350.PNG)
 
-![1](./pic/IMG_1351.png)
+![1](./pic/IMG_1351.PNG)
 
-![1](./pic/IMG_1352.png)
+![1](./pic/IMG_1352.PNG)
